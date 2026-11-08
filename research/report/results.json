@@ -1,0 +1,565 @@
+{
+ "split": {
+  "population": "tanker",
+  "train_snapshots": [
+   "202504",
+   "202505",
+   "202506",
+   "202507",
+   "202508",
+   "202509"
+  ],
+  "test_snapshots": [
+   "202510",
+   "202511",
+   "202512",
+   "202601",
+   "202602",
+   "202603"
+  ],
+  "train_n": 5339,
+  "train_pos": 169,
+  "train_vessels": 2078,
+  "train_pos_vessels": 99,
+  "test_n": 4818,
+  "test_pos": 50,
+  "test_pos_vessels": 19,
+  "test_pos_seen_in_train": 4,
+  "per_snapshot": [
+   {
+    "snapshot": "202504",
+    "n": 919,
+    "pos": 65
+   },
+   {
+    "snapshot": "202505",
+    "n": 955,
+    "pos": 28
+   },
+   {
+    "snapshot": "202506",
+    "n": 915,
+    "pos": 22
+   },
+   {
+    "snapshot": "202507",
+    "n": 885,
+    "pos": 24
+   },
+   {
+    "snapshot": "202508",
+    "n": 879,
+    "pos": 19
+   },
+   {
+    "snapshot": "202509",
+    "n": 786,
+    "pos": 11
+   },
+   {
+    "snapshot": "202510",
+    "n": 795,
+    "pos": 6
+   },
+   {
+    "snapshot": "202511",
+    "n": 778,
+    "pos": 5
+   },
+   {
+    "snapshot": "202512",
+    "n": 858,
+    "pos": 7
+   },
+   {
+    "snapshot": "202601",
+    "n": 792,
+    "pos": 14
+   },
+   {
+    "snapshot": "202602",
+    "n": 740,
+    "pos": 11
+   },
+   {
+    "snapshot": "202603",
+    "n": 855,
+    "pos": 7
+   }
+  ],
+  "candidate_features": 43
+ },
+ "feature_selection": {
+  "step1_drop_missing_constant": [
+   "encounter_already_l1m",
+   "ship_type"
+  ],
+  "step2_spearman_095": [
+   {
+    "keep": "width",
+    "drop": "length",
+    "rho": 0.978
+   },
+   {
+    "keep": "cov_gap6h_cnt_l1m",
+    "drop": "cov_gap6h_frac_l1m",
+    "rho": 0.998
+   },
+   {
+    "keep": "cnt_partners_l1m",
+    "drop": "encounter_l1m",
+    "rho": 0.998
+   },
+   {
+    "keep": "cnt_partners_l1m",
+    "drop": "encounter_hours_l1m",
+    "rho": 0.998
+   },
+   {
+    "keep": "max_shared_imo_mmsis_l1m",
+    "drop": "cnt_mmsis_l1m",
+    "rho": 0.953
+   }
+  ],
+  "n_start": 43,
+  "n_step1": 41,
+  "n_step2": 36,
+  "topk_curve": [
+   {
+    "k": 5,
+    "auc": 0.9644,
+    "auc_sd": 0.0212,
+    "pr_auc": 0.6082,
+    "pr_sd": 0.1101
+   },
+   {
+    "k": 10,
+    "auc": 0.9644,
+    "auc_sd": 0.0222,
+    "pr_auc": 0.613,
+    "pr_sd": 0.0972
+   },
+   {
+    "k": 15,
+    "auc": 0.9627,
+    "auc_sd": 0.0215,
+    "pr_auc": 0.6114,
+    "pr_sd": 0.09
+   },
+   {
+    "k": 20,
+    "auc": 0.9616,
+    "auc_sd": 0.0201,
+    "pr_auc": 0.6056,
+    "pr_sd": 0.0886
+   },
+   {
+    "k": 25,
+    "auc": 0.9611,
+    "auc_sd": 0.0209,
+    "pr_auc": 0.5949,
+    "pr_sd": 0.0921
+   },
+   {
+    "k": 30,
+    "auc": 0.9624,
+    "auc_sd": 0.0194,
+    "pr_auc": 0.597,
+    "pr_sd": 0.0817
+   },
+   {
+    "k": 36,
+    "auc": 0.9618,
+    "auc_sd": 0.0205,
+    "pr_auc": 0.5967,
+    "pr_sd": 0.087
+   }
+  ],
+  "k_selected": 5,
+  "selected": [
+   "mid",
+   "imo_number",
+   "distance_nm_l1m",
+   "width",
+   "port_l1m"
+  ],
+  "importance": {
+   "mid": 4360.0,
+   "imo_number": 1996.1,
+   "distance_nm_l1m": 996.5,
+   "width": 821.8,
+   "port_l1m": 731.4,
+   "rot_null_l1m": 410.6,
+   "dest_vague_l1m": 314.8,
+   "n_valid_pos": 303.0,
+   "dest_ru_l1m": 299.0,
+   "draught_range_l1m": 256.2,
+   "max_gap_hours_l1m": 253.0,
+   "mean_sog_l1m": 232.5,
+   "sog_mismatch_l1m": 232.0,
+   "frozen_moving_l1m": 209.6,
+   "cnt_destinations_l1m": 200.2,
+   "jump50_l1m": 195.2,
+   "loiter_l1m": 191.4,
+   "gap2h_cnt_l1m": 144.8,
+   "gap2h_frac_l1m": 126.1,
+   "transit_out_l1m": 107.4,
+   "gap6h_cnt_l1m": 92.0,
+   "days_present_l1m": 89.6,
+   "transit_in_l1m": 58.6,
+   "cnt_partners_l1m": 10.1,
+   "encounter_tanker_l1m": 0.9,
+   "dest_empty_l1m": 0.0,
+   "anchor_moving_l1m": 0.0,
+   "cov_gap6h_cnt_l1m": 0.0,
+   "cov_gap2h_cnt_l1m": 0.0,
+   "has_valid_imo": 0.0,
+   "cnt_names_l1m": 0.0,
+   "cnt_callsigns_l1m": 0.0,
+   "dims_length_gap": 0.0,
+   "cnt_imos_l1m": 0.0,
+   "max_shared_imo_mmsis_l1m": 0.0,
+   "heading_null_l1m": 0.0
+  }
+ },
+ "algorithms_cv": {
+  "LogReg": {
+   "auc": 0.9439633809865671,
+   "auc_sd": 0.018729723483943465,
+   "pr_auc": 0.32884700421490454,
+   "pr_sd": 0.045786593739440745,
+   "fit_s": 0.4
+  },
+  "RandomForest": {
+   "auc": 0.9572534576510463,
+   "auc_sd": 0.01851527038644632,
+   "pr_auc": 0.46039285810200725,
+   "pr_sd": 0.0834655945163686,
+   "fit_s": 11.3
+  },
+  "XGBoost": {
+   "auc": 0.9681900539597086,
+   "auc_sd": 0.019447837229533638,
+   "pr_auc": 0.641621408186296,
+   "pr_sd": 0.08414230432317273,
+   "fit_s": 1.0
+  },
+  "CatBoost": {
+   "auc": 0.9739637643697723,
+   "auc_sd": 0.010322809208630422,
+   "pr_auc": 0.6779097108206622,
+   "pr_sd": 0.07598487582901128,
+   "fit_s": 10.1
+  },
+  "LightGBM": {
+   "auc": 0.9644408369946594,
+   "auc_sd": 0.021248394202294508,
+   "pr_auc": 0.6081918944848297,
+   "pr_sd": 0.11008883283521577,
+   "fit_s": 0.9
+  }
+ },
+ "optuna": {
+  "algorithm": "CatBoost",
+  "n_trials": 60,
+  "sampler": "TPE",
+  "objective": "mean CV ROC-AUC (StratifiedGroupKFold 5)",
+  "default_auc": 0.9739637643697723,
+  "best_auc": 0.9787344054923983,
+  "best_auc_sd": 0.00958987811826386,
+  "best_pr_auc": 0.7141751686848604,
+  "best_params": {
+   "iterations": 500,
+   "learning_rate": 0.09703994596047981,
+   "depth": 3,
+   "l2_leaf_reg": 3.1673294207526914,
+   "random_strength": 0.3771870423635638,
+   "bagging_temperature": 0.46583114863549013
+  },
+  "param_importance": {
+   "random_strength": 0.485,
+   "depth": 0.166,
+   "learning_rate": 0.147,
+   "bagging_temperature": 0.128,
+   "iterations": 0.062,
+   "l2_leaf_reg": 0.011
+  }
+ },
+ "test": {
+  "LogReg": {
+   "auc": 0.949375,
+   "pr_auc": 0.13003917160554654,
+   "auc_ci95": [
+    0.9260618600533196,
+    0.9704979837881814
+   ],
+   "pr_auc_ci95": [
+    0.066067933959585,
+    0.2230044495279346
+   ],
+   "n_boot": 1000,
+   "purged_auc": 0.9464409468923256,
+   "purged_pr_auc": 0.11446426480337098,
+   "top10": {
+    "k": 10,
+    "hits": 9,
+    "pos": 50,
+    "precision": 0.15,
+    "recall": 0.18
+   },
+   "top30": {
+    "k": 30,
+    "hits": 31,
+    "pos": 50,
+    "precision": 0.17222222222222222,
+    "recall": 0.62
+   },
+   "month_auc": {
+    "202510": 0.952,
+    "202511": 0.909,
+    "202512": 0.951,
+    "202601": 0.973,
+    "202602": 0.942,
+    "202603": 0.945
+   }
+  },
+  "RandomForest": {
+   "auc": 0.966598154362416,
+   "pr_auc": 0.2636250488231746,
+   "auc_ci95": [
+    0.9500645607681011,
+    0.9825842211032224
+   ],
+   "pr_auc_ci95": [
+    0.12838968727058406,
+    0.44146315928199875
+   ],
+   "n_boot": 1000,
+   "purged_auc": 0.964596403559965,
+   "purged_pr_auc": 0.20475259563192105,
+   "top10": {
+    "k": 10,
+    "hits": 15,
+    "pos": 50,
+    "precision": 0.25,
+    "recall": 0.3
+   },
+   "top30": {
+    "k": 30,
+    "hits": 36,
+    "pos": 50,
+    "precision": 0.2,
+    "recall": 0.72
+   },
+   "month_auc": {
+    "202510": 0.97,
+    "202511": 0.939,
+    "202512": 0.963,
+    "202601": 0.985,
+    "202602": 0.961,
+    "202603": 0.969
+   }
+  },
+  "XGBoost": {
+   "auc": 0.9492030201342282,
+   "pr_auc": 0.2196516678929456,
+   "auc_ci95": [
+    0.9236639035448508,
+    0.9738959161382256
+   ],
+   "pr_auc_ci95": [
+    0.09164945134902265,
+    0.39527619465287034
+   ],
+   "n_boot": 1000,
+   "purged_auc": 0.9455290706156988,
+   "purged_pr_auc": 0.17023385371365896,
+   "top10": {
+    "k": 10,
+    "hits": 12,
+    "pos": 50,
+    "precision": 0.2,
+    "recall": 0.24
+   },
+   "top30": {
+    "k": 30,
+    "hits": 31,
+    "pos": 50,
+    "precision": 0.17222222222222222,
+    "recall": 0.62
+   },
+   "month_auc": {
+    "202510": 0.97,
+    "202511": 0.926,
+    "202512": 0.951,
+    "202601": 0.973,
+    "202602": 0.932,
+    "202603": 0.923
+   }
+  },
+  "CatBoost": {
+   "auc": 0.9633221476510067,
+   "pr_auc": 0.24357999250042178,
+   "auc_ci95": [
+    0.9422844289963144,
+    0.9810555023194036
+   ],
+   "pr_auc_ci95": [
+    0.11831939921615794,
+    0.40984959564926926
+   ],
+   "n_boot": 1000,
+   "purged_auc": 0.9611631893784651,
+   "purged_pr_auc": 0.20010998673112063,
+   "top10": {
+    "k": 10,
+    "hits": 10,
+    "pos": 50,
+    "precision": 0.16666666666666666,
+    "recall": 0.2
+   },
+   "top30": {
+    "k": 30,
+    "hits": 32,
+    "pos": 50,
+    "precision": 0.17777777777777778,
+    "recall": 0.64
+   },
+   "month_auc": {
+    "202510": 0.977,
+    "202511": 0.929,
+    "202512": 0.966,
+    "202601": 0.985,
+    "202602": 0.953,
+    "202603": 0.945
+   }
+  },
+  "LightGBM": {
+   "auc": 0.9411115771812081,
+   "pr_auc": 0.21139980205590425,
+   "auc_ci95": [
+    0.9100346086145064,
+    0.9707528663484963
+   ],
+   "pr_auc_ci95": [
+    0.08285261906562746,
+    0.37300398004245855
+   ],
+   "n_boot": 1000,
+   "purged_auc": 0.9366245987744383,
+   "purged_pr_auc": 0.15742015524450295,
+   "top10": {
+    "k": 10,
+    "hits": 9,
+    "pos": 50,
+    "precision": 0.15,
+    "recall": 0.18
+   },
+   "top30": {
+    "k": 30,
+    "hits": 30,
+    "pos": 50,
+    "precision": 0.16666666666666666,
+    "recall": 0.6
+   },
+   "month_auc": {
+    "202510": 0.971,
+    "202511": 0.926,
+    "202512": 0.949,
+    "202601": 0.957,
+    "202602": 0.923,
+    "202603": 0.912
+   }
+  },
+  "CatBoost+Optuna": {
+   "auc": 0.9584983221476511,
+   "pr_auc": 0.20326724863666934,
+   "auc_ci95": [
+    0.9351689481985236,
+    0.9805453217228782
+   ],
+   "pr_auc_ci95": [
+    0.10110805744580861,
+    0.3540844232200487
+   ],
+   "n_boot": 1000,
+   "purged_auc": 0.9554822001750802,
+   "purged_pr_auc": 0.16004474243368336,
+   "top10": {
+    "k": 10,
+    "hits": 9,
+    "pos": 50,
+    "precision": 0.15,
+    "recall": 0.18
+   },
+   "top30": {
+    "k": 30,
+    "hits": 31,
+    "pos": 50,
+    "precision": 0.17222222222222222,
+    "recall": 0.62
+   },
+   "month_auc": {
+    "202510": 0.97,
+    "202511": 0.927,
+    "202512": 0.958,
+    "202601": 0.981,
+    "202602": 0.948,
+    "202603": 0.944
+   }
+  }
+ },
+ "topk_by_month": [
+  {
+   "snapshot": "202510",
+   "10": 3,
+   "30": 4,
+   "50": 5,
+   "pos": 6
+  },
+  {
+   "snapshot": "202511",
+   "10": 0,
+   "30": 3,
+   "50": 3,
+   "pos": 5
+  },
+  {
+   "snapshot": "202512",
+   "10": 1,
+   "30": 4,
+   "50": 6,
+   "pos": 7
+  },
+  {
+   "snapshot": "202601",
+   "10": 3,
+   "30": 10,
+   "50": 12,
+   "pos": 14
+  },
+  {
+   "snapshot": "202602",
+   "10": 2,
+   "30": 7,
+   "50": 9,
+   "pos": 11
+  },
+  {
+   "snapshot": "202603",
+   "10": 0,
+   "30": 3,
+   "50": 5,
+   "pos": 7
+  }
+ ],
+ "final_model": "CatBoost+Optuna",
+ "shap_mean_abs": {
+  "imo_number": 1.7572,
+  "width": 1.3725,
+  "mid": 1.003,
+  "distance_nm_l1m": 0.4043,
+  "port_l1m": 0.3819
+ },
+ "runtime_s": 737.9
+}

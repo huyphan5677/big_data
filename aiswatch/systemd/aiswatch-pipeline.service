@@ -1,0 +1,11 @@
+[Unit]
+Description=aiswatch – xử lý ngày mới + chấm điểm (mô hình đã train)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/aiswatch
+ExecStart=%h/aiswatch/run.sh --no-label-download
+Nice=10
+IOSchedulingClass=idle
+MemoryMax=8G

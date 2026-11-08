@@ -1,0 +1,45 @@
+{
+ "at": "2026-11-08T03:29:11+00:00",
+ "algorithm": "XGBoost",
+ "features": [
+  "distance_nm_l1m",
+  "v_draught_out_rel",
+  "v_draught_out_minus_in",
+  "v_baltic_stay_days",
+  "port_l1m",
+  "v_dest_ru_share",
+  "mean_sog_l1m",
+  "max_gap_hours_l1m",
+  "v_in_per30",
+  "dest_vague_l1m"
+ ],
+ "params": {
+  "n_estimators": 250,
+  "learning_rate": 0.06122218301056536,
+  "max_depth": 6,
+  "subsample": 0.8075264772316914,
+  "colsample_bytree": 0.46910293934372854,
+  "reg_lambda": 21.646832463256246,
+  "min_child_weight": 1.0071318540007315
+ },
+ "seeds": [
+  0,
+  1,
+  2,
+  3,
+  4
+ ],
+ "ext": "json",
+ "train_snapshots": [
+  "202504",
+  "202505",
+  "202506",
+  "202507",
+  "202508",
+  "202509"
+ ],
+ "train_n": 5339,
+ "train_pos": 169,
+ "population": "tanker",
+ "source": "report/final/results.json"
+}

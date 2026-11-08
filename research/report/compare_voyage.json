@@ -1,0 +1,65 @@
+{
+ "B10": {
+  "cv": 0.8935966778113847,
+  "cv_sd": 0.013993498263246267,
+  "test": 0.8663045302013423,
+  "ci": [
+   0.8150802990951428,
+   0.9097098498421416
+  ],
+  "pr": 0.051132375633717864,
+  "top30": 11,
+  "top_imp": {
+   "distance_nm_l1m": 21.6,
+   "cnt_destinations_l1m": 14.2,
+   "port_l1m": 14.2,
+   "max_gap_hours_l1m": 12.3,
+   "mean_sog_l1m": 10.0,
+   "draught_range_l1m": 7.5,
+   "frozen_moving_l1m": 6.6,
+   "jump50_l1m": 5.5
+  }
+ },
+ "B10+voyage": {
+  "cv": 0.9085089509584547,
+  "cv_sd": 0.021693717625470857,
+  "test": 0.9054026845637584,
+  "ci": [
+   0.863439566634359,
+   0.9368162564958259
+  ],
+  "pr": 0.09800432231005439,
+  "top30": 20,
+  "top_imp": {
+   "distance_nm_l1m": 15.7,
+   "port_l1m": 10.2,
+   "v_draught_out_rel": 8.9,
+   "v_draught_out_minus_in": 7.8,
+   "cnt_destinations_l1m": 7.4,
+   "v_present_per30": 7.4,
+   "max_gap_hours_l1m": 5.9,
+   "mean_sog_l1m": 5.1
+  }
+ },
+ "voyage only": {
+  "cv": 0.8942006981495785,
+  "cv_sd": 0.03099038309484321,
+  "test": 0.8928145973154362,
+  "ci": [
+   0.8256320787751864,
+   0.9436725872188299
+  ],
+  "pr": 0.11270954962559258,
+  "top30": 19,
+  "top_imp": {
+   "v_present_per30": 24.4,
+   "v_draught_out_rel": 17.0,
+   "v_in_per30": 13.3,
+   "v_draught_out_minus_in": 12.8,
+   "v_baltic_stay_days": 9.3,
+   "v_cycle_days": 9.1,
+   "v_out_per30": 8.4,
+   "v_dest_ru_share": 5.1
+  }
+ }
+}

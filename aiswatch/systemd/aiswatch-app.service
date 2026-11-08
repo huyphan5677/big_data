@@ -1,0 +1,12 @@
+[Unit]
+Description=aiswatch – giao diện app
+After=network-online.target
+
+[Service]
+WorkingDirectory=%h/aiswatch
+ExecStart=%h/aiswatch/serve.sh app
+Restart=on-failure
+MemoryMax=1500M
+
+[Install]
+WantedBy=default.target

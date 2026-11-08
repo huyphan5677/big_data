@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+config.env
+_data/
+research/data/
+research/logs/
+research/.deps*/
+research/catboost_info/

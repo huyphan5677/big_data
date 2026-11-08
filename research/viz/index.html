@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Giám sát tàu dầu — eo biển Đan Mạch</title>
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/deck.gl@9.0.38/dist.min.js"></script>
+<style>
+:root { --bg:#0f1420; --panel:#161d2c; --line:#26304a; --text:#dfe6f3; --muted:#8792a8; --red:#ff4d4f; --orange:#ffa940; --blue:#4c8dff; --green:#36cfc9; --yellow:#fadb14; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:13px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; height:100vh; overflow:hidden; }
+#app { display:grid; grid-template-columns:340px 1fr 380px; grid-template-rows:56px 1fr; height:100vh; }
+header { grid-column:1/4; display:flex; align-items:center; gap:14px; padding:0 16px; border-bottom:1px solid var(--line); background:var(--panel); }
+header h1 { font-size:15px; margin:0; font-weight:650; white-space:nowrap; }
+header .sp { flex:1; }
+button, select, input { background:#20293d; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:5px 10px; font:inherit; cursor:pointer; }
+button.on { background:var(--red); border-color:var(--red); color:#fff; }
+#clock { font:600 16px ui-monospace, monospace; min-width:150px; text-align:center; color:var(--yellow); }
+#slider { width:220px; }
+aside { background:var(--panel); overflow:auto; border-right:1px solid var(--line); }
+aside.right { border-right:0; border-left:1px solid var(--line); display:flex; flex-direction:column; overflow:hidden; }
+.sec { padding:12px 14px; border-bottom:1px solid var(--line); }
+.sec h2 { margin:0 0 4px; font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:600; }
+.hint { color:var(--muted); font-size:12px; }
+.row { padding:7px 14px; border-bottom:1px solid #1d2537; cursor:pointer; }
+.row:hover { background:#1c2538; } .row.sel { background:#2a2410; outline:1px solid var(--yellow); }
+.row .top { display:flex; align-items:center; gap:8px; }
+.rk { width:24px; color:var(--muted); font-weight:600; text-align:right; }
+.nm { font-weight:600; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.dot { width:8px; height:8px; border-radius:50%; background:#3a4560; } .dot.live { background:var(--green); box-shadow:0 0 6px var(--green); }
+.bar { height:4px; background:#26304a; border-radius:2px; margin:4px 0 3px 32px; } .bar i { display:block; height:4px; border-radius:2px; background:linear-gradient(90deg,var(--orange),var(--red)); }
+.why { margin-left:32px; color:var(--muted); font-size:11.5px; }
+.ans { margin-left:32px; font-size:11.5px; color:var(--red); font-weight:600; }
+#map { position:relative; } #mapgl { position:absolute; inset:0; }
+#legend { position:absolute; left:12px; bottom:12px; background:rgba(22,29,44,.92); border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:12px; }
+#legend div { display:flex; align-items:center; gap:6px; margin:2px 0; } #legend b { display:inline-block; width:18px; height:3px; border-radius:2px; }
+#feed { flex:1; overflow:auto; }
+.al { padding:8px 14px; border-bottom:1px solid #1d2537; cursor:pointer; animation:fl 1.2s ease-out; }
+.al:hover { background:#1c2538; }
+.al .tm { font:600 11px ui-monospace, monospace; color:var(--muted); }
+.al.high { border-left:3px solid var(--red); } .al.mid { border-left:3px solid var(--orange); } .al.low { border-left:3px solid #3a4560; opacity:.8; }
+@keyframes fl { from { background:#3a2a10; } to { background:transparent; } }
+#detail { border-top:1px solid var(--line); max-height:52%; overflow:auto; }
+#detail .name { font-size:16px; font-weight:700; } .kv { display:flex; gap:14px; margin:6px 0; } .kv div b { display:block; font-size:16px; }
+svg text { fill:var(--muted); font-size:10px; }
+#intro { position:fixed; inset:0; background:rgba(5,8,14,.78); display:flex; align-items:center; justify-content:center; z-index:10; }
+#intro .card { width:min(640px,92vw); background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:22px 26px; }
+#intro h2 { margin:0 0 8px; } #intro ol { padding-left:20px; } #intro li { margin:8px 0; }
+.tag { display:inline-block; padding:1px 6px; border-radius:4px; font-size:11px; font-weight:600; }
+.tag.r { background:rgba(255,77,79,.18); color:var(--red); } .tag.b { background:rgba(76,141,255,.18); color:var(--blue); }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>🛢️ Giám sát tàu dầu qua eo biển Đan Mạch</h1>
+    <button id="prev" title="Ngày trước">◀</button>
+    <select id="day"></select>
+    <button id="next" title="Ngày sau">▶</button>
+    <button id="play">▶ Phát</button>
+    <select id="speed"><option value="20">20 phút/giây</option><option value="60" selected>1 giờ/giây</option><option value="180">3 giờ/giây</option></select>
+    <input id="slider" type="range" min="0" max="1439" value="0">
+    <div id="clock">—</div>
+    <div class="sp"></div>
+    <label class="hint"><input type="checkbox" id="allev"> mọi cảnh báo</label>
+    <button id="answer">Đáp án: tắt</button>
+    <button id="help">?</button>
+  </header>
+
+  <aside>
+    <div class="sec"><h2>Danh sách theo dõi hôm nay</h2>
+      <div class="hint" id="wl-info">Mô hình chấm mỗi sáng · top 30 trong số tàu dầu vừa đi qua. <span class="dot live" style="display:inline-block"></span> = đang trong vùng lúc này.</div></div>
+    <div id="watch"></div>
+  </aside>
+
+  <div id="map"><div id="mapgl"></div>
+    <div id="legend">
+      <div><b style="background:var(--red)"></b> tàu trong danh sách theo dõi (top 10 đậm nhất)</div>
+      <div><b style="background:#5b6b8c"></b> tàu dầu khác</div>
+      <div><b style="background:var(--green)"></b> cửa kiểm soát: Skagen · Great Belt · Øresund</div>
+      <div><b style="background:var(--yellow)"></b> tàu đang chọn</div>
+    </div>
+  </div>
+
+  <aside class="right">
+    <div class="sec"><h2>Cảnh báo theo phút</h2>
+      <div class="hint">Luật chạy trên vị trí phát lại: tàu trong danh sách <b>qua cửa</b> (ra/vào Baltic, kèm mớn nước) hoặc <b>mất tín hiệu ≥2 giờ</b> trong vùng phủ sóng.</div></div>
+    <div id="feed"></div>
+    <div id="detail" class="sec"><div class="hint">Bấm vào một tàu (danh sách, bản đồ hoặc cảnh báo) để xem chi tiết.</div></div>
+  </aside>
+</div>
+
+<div id="intro"><div class="card">
+  <h2>Cách hệ thống làm việc</h2>
+  <ol>
+    <li><b>Mỗi sáng</b>, mô hình đọc hành vi AIS của mọi tàu dầu vừa qua eo biển và chấm <b>điểm rủi ro bị EU/UK trừng phạt trong 6 tháng tới</b>. Danh sách bên <b>trái</b> là 30 tàu đáng để mắt nhất, kèm lý do.</li>
+    <li><b>Bản đồ</b> phát lại vị trí thật (mỗi 10 phút). Tàu <span class="tag r">đỏ</span> là tàu đang bị theo dõi, để lại vệt 6 giờ.</li>
+    <li><b>Trong ngày</b>, luật theo phút bắn <b>cảnh báo</b> (bên phải) khi tàu bị theo dõi đi qua cửa Skagen / Great Belt / Øresund: đây là lúc có thể lên tàu kiểm tra.</li>
+    <li>Nút <b>Đáp án</b> cho biết tàu nào sau đó bị cấm thật (dữ liệu là quá khứ 10/2025–03/2026, mô hình chưa từng thấy khi học).</li>
+  </ol>
+  <p class="hint">Gợi ý: đang mở sẵn ngày <b>29/10/2025</b> và chọn tàu <b>DOVE</b> (hạng 9). Bấm <b>▶ Phát</b>: khoảng <b>02:09</b> DOVE đi ra qua <b>Great Belt</b>, khoảng <b>17:10</b> qua <b>Skagen</b>, mớn nước <b>14,8 m</b> (đầy dầu; lúc đi vào chỉ khoảng 7,8 m). Bật <b>Đáp án</b>: DOVE bị EU/UK cấm ngày 24/04/2026.</p>
+  <button id="go" class="on">Bắt đầu</button>
+</div></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const fmtT = m => `${String(Math.floor(m/60)).padStart(2,'0')}:${String(Math.floor(m%60)).padStart(2,'0')}`;
+let META, HIST, DAY = null, tMin = 0, playing = false, last = 0, sel = null, answer = false, follow = false, shown = new Set();
+const cache = {};
+
+const map = new maplibregl.Map({ container:'mapgl', style:'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+  center:[11.2, 56.6], zoom:5.9, attributionControl:{compact:true} });
+const overlay = new deck.MapboxOverlay({ interleaved:false, layers:[], getTooltip });
+map.addControl(overlay);
+
+function getTooltip({object, layer}) {
+  if (!object || !layer) return null;
+  if (layer.id === 'heads') { const r = DAY.rank[object.id]; return `${META.vessels[object.id]?.n || object.id}${r && r <= 30 ? ` · hạng ${r}` : ''}\n${object.sog != null ? object.sog.toFixed(1)+' kn' : ''}`; }
+  if (layer.id === 'gates') return object.name;
+  return null;
+}
+
+async function loadDay(d) {
+  if (!cache[d]) cache[d] = await (await fetch(`data/day/${d}.json`)).json();
+  DAY = cache[d]; shown = new Set(); $('#feed').innerHTML = ''; $('#day').value = d;
+  for (const tr of DAY.tracks) { tr.path = []; for (let i = 0; i < tr.p.length; i += 2) tr.path.push([tr.p[i], tr.p[i+1]]); }
+  const byId = Object.fromEntries(DAY.tracks.map(t => [t.id, t]));
+  for (const e of DAY.events) { if (e.type === 'gate') { const p = posAt(byId[e.id], (e.t - DAY.t0)/60); if (p) [e.lon, e.lat] = p; } }
+  renderWatch(); if (sel) renderDetail(sel);
+}
+function posAt(tr, m) {
+  if (!tr) return null; const t = tr.t; if (m < t[0] - 30 || m > t[t.length-1] + 30) return null;
+  let lo = 0, hi = t.length - 1; while (hi - lo > 1) { const mid = (lo+hi) >> 1; (t[mid] <= m ? lo = mid : hi = mid); }
+  if (m <= t[0]) return tr.path[0]; if (m >= t[t.length-1]) return tr.path[t.length-1];
+  if (t[hi] - t[lo] > 60) return tr.path[lo];                      // khoảng trống dữ liệu: đứng ở điểm cuối đã biết
+  const f = (m - t[lo]) / (t[hi] - t[lo]); const a = tr.path[lo], b = tr.path[hi];
+  return [a[0] + f*(b[0]-a[0]), a[1] + f*(b[1]-a[1])];
+}
+const rankOf = id => DAY.rank[id];
+function colorOf(id, alpha=255) {
+  if (id === sel) return [250, 219, 20, alpha]; const r = rankOf(id);
+  if (r && r <= 10) return [255, 77, 79, alpha]; if (r && r <= 30) return [255, 140, 90, alpha*0.9]; return [91, 107, 140, alpha*0.6];
+}
+
+function render() {
+  if (!DAY) return;
+  const heads = [];
+  for (const tr of DAY.tracks) { const p = posAt(tr, tMin); if (p) heads.push({id:tr.id, position:p}); }
+  const recent = DAY.events.filter(e => e.type === 'gate' && e.lon != null && tMin - (e.t-DAY.t0)/60 >= 0 && tMin - (e.t-DAY.t0)/60 < 90 && (rankOf(e.id) || 999) <= 30);
+  const selTr = sel && DAY.tracks.find(t => t.id === sel);
+  overlay.setProps({ layers: [
+    new deck.PathLayer({ id:'gates', data:META.gates, getPath:d => d.path, getColor:[54,207,201], widthMinPixels:5, pickable:true }),
+    new deck.TextLayer({ id:'gate-names', data:META.gates, getPosition:d => d.path[1], getText:d => d.name, getColor:[54,207,201], getSize:13,
+                         getPixelOffset:[8,-8], getTextAnchor:'start', fontWeight:700, outlineWidth:2, outlineColor:[15,20,32], fontSettings:{sdf:true} }),
+    selTr ? new deck.PathLayer({ id:'sel-day', data:[selTr], getPath:d => d.path, getColor:[250,219,20,70], widthMinPixels:2 }) : null,
+    new deck.TripsLayer({ id:'trails', data:DAY.tracks, getPath:d => d.path, getTimestamps:d => d.t, getColor:d => colorOf(d.id),
+      widthMinPixels:2.5, trailLength:360, currentTime:tMin, fadeTrail:true, capRounded:true, jointRounded:true, updateTriggers:{getColor:[sel, DAY.date]} }),
+    new deck.ScatterplotLayer({ id:'pulse', data:recent, getPosition:e => [e.lon, e.lat], getRadius:e => 2000 + 120*(tMin-(e.t-DAY.t0)/60)*60/9,
+      radiusUnits:'meters', stroked:true, filled:false, getLineColor:e => [255,77,79, Math.max(0, 255 - 2.8*(tMin-(e.t-DAY.t0)/60))], lineWidthMinPixels:2,
+      updateTriggers:{getRadius:tMin, getLineColor:tMin} }),
+    new deck.ScatterplotLayer({ id:'heads', data:heads, getPosition:d => d.position, getFillColor:d => colorOf(d.id),
+      getRadius:d => d.id === sel ? 9 : ((rankOf(d.id)||99) <= 30 ? 6 : 3.5), radiusUnits:'pixels', stroked:true, getLineColor:[15,20,32], lineWidthMinPixels:1,
+      pickable:true, onClick:({object}) => select(object.id, true), updateTriggers:{getFillColor:[sel, DAY.date], getRadius:[sel, DAY.date]} }),
+  ].filter(Boolean) });
+  $('#clock').textContent = `${DAY.date} ${fmtT(tMin)}`; $('#slider').value = Math.floor(tMin);
+  // cảnh báo tới hạn
+  for (const e of DAY.events) { const m = (e.t - DAY.t0)/60; if (m <= tMin && !shown.has(e)) { shown.add(e); pushAlert(e); } }
+  // chấm "đang trong vùng"
+  const live = new Set(heads.map(h => h.id));
+  document.querySelectorAll('#watch .row').forEach(r => r.querySelector('.dot').classList.toggle('live', live.has(r.dataset.id)));
+  if (follow && sel) { const h = heads.find(h => h.id === sel); if (h) map.easeTo({center:h.position, duration:300}); }
+}
+
+function sev(e) { const r = rankOf(e.id) || 999; if (r <= 30) return e.type === 'gate' ? 'high' : 'mid'; return 'low'; }
+function pushAlert(e) {
+  const s = sev(e); if (s === 'low' && !$('#allev').checked) return;
+  const v = META.vessels[e.id] || {n:e.id}; const r = rankOf(e.id);
+  const txt = e.type === 'gate'
+    ? `${e.dir === 'out' ? '⬆️' : '⬇️'} <b>${v.n}</b>${r && r <= 30 ? ` <span class="tag r">hạng ${r}</span>` : ''} vừa qua <b>${e.gate}</b> → ${e.dir === 'out' ? '<b>RA</b> Biển Bắc' : '<b>VÀO</b> Baltic'}${e.draught ? `, mớn nước <b>${e.draught.toFixed(1)} m</b>` : ''}`
+    : `📡 <b>${v.n}</b>${r && r <= 30 ? ` <span class="tag r">hạng ${r}</span>` : ''} xuất hiện lại sau <b>${e.hours} giờ</b> mất tín hiệu`;
+  const ans = answer && v.l ? `<div class="ans">bị EU/UK cấm ${v.l}</div>` : '';
+  const div = document.createElement('div'); div.className = `al ${s}`;
+  div.innerHTML = `<div class="tm">${fmtT((e.t - DAY.t0)/60)}</div>${txt}${ans}`;
+  div.onclick = () => { select(e.id, true); if (e.lon != null) map.flyTo({center:[e.lon, e.lat], zoom:8}); };
+  $('#feed').prepend(div);
+}
+
+function renderWatch() {
+  const n = META.watch_k; const w = DAY.watch.filter(x => x.rank <= n);
+  $('#wl-info').innerHTML = `${DAY.date}: ${DAY.n_present} tàu dầu vừa đi qua (3 ngày) → mô hình chọn <b>${n}</b> tàu. <span class="dot live" style="display:inline-block"></span> = đang trong vùng lúc này.`;
+  $('#watch').innerHTML = w.map(x => { const v = META.vessels[x.id];
+    return `<div class="row ${x.id === sel ? 'sel' : ''}" data-id="${x.id}"><div class="top"><span class="rk">${x.rank}</span><span class="dot"></span><span class="nm">${v.n}</span><span class="hint">${(x.score*100).toFixed(0)}</span></div>
+      <div class="bar"><i style="width:${Math.min(100, x.score*100*1.2)}%"></i></div><div class="why">${x.why.join(' · ')}</div>
+      ${answer && v.l ? `<div class="ans">${x.y ? '🚨 ' : ''}bị EU/UK cấm ${v.l}${x.y ? ' (trong 6 tháng)' : ''}</div>` : ''}</div>`; }).join('');
+  document.querySelectorAll('#watch .row').forEach(r => r.onclick = () => select(r.dataset.id, true));
+}
+
+function select(id, fly) {
+  sel = id; follow = false; renderWatch(); renderDetail(id);
+  const tr = DAY.tracks.find(t => t.id === id); const p = tr && (posAt(tr, tMin) || tr.path[tr.path.length-1]);
+  if (fly && p) map.flyTo({center:p, zoom:7.5, duration:900});
+  render();
+}
+
+function spark(h, curIdx, listedIdx) {
+  const W = 340, H = 90, n = META.dates.length, xs = i => 8 + (W-16)*i/(n-1), ys = s => H - 14 - (H-24)*s;
+  const pts = h.s.map(([i, s]) => `${xs(i).toFixed(1)},${ys(s).toFixed(1)}`).join(' ');
+  return `<svg width="${W}" height="${H}"><rect x="0" y="0" width="${W}" height="${H}" fill="#121826" rx="6"/>
+    <polyline points="${pts}" fill="none" stroke="#ff7a45" stroke-width="1.6"/>
+    <line x1="${xs(curIdx)}" x2="${xs(curIdx)}" y1="4" y2="${H-12}" stroke="#fadb14" stroke-dasharray="3,3"/>
+    ${listedIdx != null ? `<line x1="${xs(listedIdx)}" x2="${xs(listedIdx)}" y1="4" y2="${H-12}" stroke="#ff4d4f" stroke-width="2"/><text x="${xs(listedIdx)-4}" y="12" text-anchor="end" style="fill:#ff4d4f">bị cấm</text>` : ''}
+    <text x="8" y="${H-2}">${META.dates[0]}</text><text x="${W-8}" y="${H-2}" text-anchor="end">${META.dates[n-1]}</text><text x="8" y="12">điểm rủi ro</text></svg>`;
+}
+function draughtChart(h) {
+  if (!h.x) return '<div class="hint">Chưa thấy qua cửa trong giai đoạn này.</div>';
+  const W = 340, H = 110, d0 = new Date(META.dates[0]), d1 = new Date(META.dates[META.dates.length-1]);
+  const xs = d => 8 + (W-16)*(new Date(d)-d0)/(d1-d0), vals = h.x.filter(x => x[2] != null).map(x => x[2]);
+  if (!vals.length) return '<div class="hint">Không có mớn nước khai báo.</div>';
+  const lo = Math.min(...vals) - 1, hi = Math.max(...vals) + 1, ys = v => H - 16 - (H-28)*(v-lo)/(hi-lo);
+  return `<svg width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="#121826" rx="6"/>
+    ${h.x.filter(x => x[2] != null).map(([d, k, v]) => k === 'o'
+      ? `<path d="M${xs(d)},${ys(v)-6} l5,9 h-10z" fill="#ff4d4f"><title>${d} RA ${v} m</title></path>`
+      : `<path d="M${xs(d)},${ys(v)+6} l5,-9 h-10z" fill="#4c8dff"><title>${d} VÀO ${v} m</title></path>`).join('')}
+    <text x="8" y="12">mớn nước (m): ▲ ra Biển Bắc  ▼ vào Baltic</text><text x="${W-8}" y="12" text-anchor="end">${lo.toFixed(0)}–${hi.toFixed(0)} m</text></svg>`;
+}
+function renderDetail(id) {
+  const v = META.vessels[id] || {n:id}; const h = HIST[id] || {s:[]}; const curIdx = META.dates.indexOf(DAY.date);
+  const li = answer && v.l ? META.dates.indexOf(v.l) : -1; const w = DAY.watch.find(x => x.id === id);
+  $('#detail').innerHTML = `<div class="name">${v.n}</div><div class="hint">${id}</div>
+    <div class="kv"><div><span class="hint">hạng hôm nay</span><b>${rankOf(id) ?? '—'}</b></div><div><span class="hint">điểm</span><b>${DAY.score[id] != null ? (DAY.score[id]*100).toFixed(0) : '—'}</b></div>
+    <div><button id="follow">${follow ? 'Đang bám theo' : '🎯 Bám theo'}</button></div></div>
+    ${w ? `<div class="hint" style="margin-bottom:6px">Vì sao: ${w.why.join(' · ')}</div>` : ''}
+    ${answer ? `<div class="ans" style="margin:0 0 6px">${v.l ? 'Bị EU/UK cấm lần đầu: ' + v.l : 'Không có trong danh sách EU/UK (tới 10/2026)'}</div>` : ''}
+    ${spark(h, curIdx, li >= 0 ? li : null)}<div style="height:6px"></div>${draughtChart(h)}`;
+  $('#follow').onclick = () => { follow = !follow; renderDetail(id); };
+}
+
+function tick(ts) {
+  if (playing && DAY) {
+    const dt = last ? (ts - last)/1000 : 0; tMin += dt * +$('#speed').value;
+    if (tMin >= 1440) { const i = META.dates.indexOf(DAY.date); if (i < META.dates.length - 1) { tMin = 0; loadDay(META.dates[i+1]); } else { tMin = 1439; setPlay(false); } }
+  }
+  last = ts; render(); requestAnimationFrame(tick);
+}
+function setPlay(p) { playing = p; $('#play').textContent = p ? '⏸ Dừng' : '▶ Phát'; $('#play').classList.toggle('on', p); }
+function jump(d) { tMin = 0; loadDay(d); }
+
+(async () => {
+  META = await (await fetch('data/meta.json')).json();
+  HIST = await (await fetch('data/history.json')).json();
+  const avail = []; for (const d of META.dates) avail.push(d);
+  $('#day').innerHTML = avail.map(d => `<option>${d}</option>`).join('');
+  $('#day').onchange = e => jump(e.target.value);
+  $('#prev').onclick = () => { const i = META.dates.indexOf(DAY.date); if (i > 0) jump(META.dates[i-1]); };
+  $('#next').onclick = () => { const i = META.dates.indexOf(DAY.date); if (i < META.dates.length-1) jump(META.dates[i+1]); };
+  $('#play').onclick = () => setPlay(!playing);
+  $('#slider').oninput = e => { tMin = +e.target.value; shown = new Set(DAY.events.filter(x => (x.t-DAY.t0)/60 < tMin - 1)); $('#feed').innerHTML = ''; };
+  $('#answer').onclick = () => { answer = !answer; $('#answer').textContent = `Đáp án: ${answer ? 'bật' : 'tắt'}`; $('#answer').classList.toggle('on', answer); renderWatch(); if (sel) renderDetail(sel); };
+  $('#help').onclick = () => $('#intro').style.display = 'flex';
+  $('#go').onclick = () => { $('#intro').style.display = 'none'; };
+  await loadDay('2025-10-29'); select('IMO9297541', false);
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

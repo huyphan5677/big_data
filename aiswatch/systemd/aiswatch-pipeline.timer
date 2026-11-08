@@ -1,0 +1,9 @@
+[Unit]
+Description=aiswatch – chạy pipeline mỗi sáng (dữ liệu ngày hôm trước thường có trên kho vào buổi sáng UTC)
+
+[Timer]
+OnCalendar=*-*-* 06:30:00 UTC
+Persistent=true
+
+[Install]
+WantedBy=timers.target

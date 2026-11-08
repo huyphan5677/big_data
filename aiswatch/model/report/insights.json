@@ -1,0 +1,390 @@
+{
+ "rq1_medians": {
+  "v_draught_out_minus_in": {
+   "Sẽ bị cấm (≤6 tháng)": 5.7,
+   "Tàu dầu khác": 0.0
+  },
+  "v_baltic_stay_days": {
+   "Sẽ bị cấm (≤6 tháng)": 12.0,
+   "Tàu dầu khác": 6.5
+  },
+  "port_l1m": {
+   "Sẽ bị cấm (≤6 tháng)": 0.0,
+   "Tàu dầu khác": 0.026
+  },
+  "distance_nm_l1m": {
+   "Sẽ bị cấm (≤6 tháng)": 183.377,
+   "Tàu dầu khác": 110.05
+  },
+  "loiter_l1m": {
+   "Sẽ bị cấm (≤6 tháng)": 0.0,
+   "Tàu dầu khác": 0.002
+  },
+  "encounter_l1m": {
+   "Sẽ bị cấm (≤6 tháng)": 0.0,
+   "Tàu dầu khác": 0.0
+  }
+ },
+ "rq1_share_nonzero": {
+  "loiter_l1m": {
+   "Sẽ bị cấm (≤6 tháng)": 0.16,
+   "Tàu dầu khác": 0.525
+  },
+  "encounter_l1m": {
+   "Sẽ bị cấm (≤6 tháng)": 0.055,
+   "Tàu dầu khác": 0.125
+  }
+ },
+ "rq1_encounters_oct_mar": {
+  "sessions": 98434,
+  "with_already": 6,
+  "with_future": 6
+ },
+ "sanctioned_still_transiting": [
+  {
+   "month": "2025-04",
+   "already_present": 27,
+   "already_tankers": 26,
+   "tankers_total": 945
+  },
+  {
+   "month": "2025-05",
+   "already_present": 53,
+   "already_tankers": 52,
+   "tankers_total": 1007
+  },
+  {
+   "month": "2025-06",
+   "already_present": 45,
+   "already_tankers": 45,
+   "tankers_total": 960
+  },
+  {
+   "month": "2025-07",
+   "already_present": 54,
+   "already_tankers": 53,
+   "tankers_total": 938
+  },
+  {
+   "month": "2025-08",
+   "already_present": 62,
+   "already_tankers": 61,
+   "tankers_total": 940
+  },
+  {
+   "month": "2025-09",
+   "already_present": 70,
+   "already_tankers": 69,
+   "tankers_total": 855
+  },
+  {
+   "month": "2025-10",
+   "already_present": 95,
+   "already_tankers": 93,
+   "tankers_total": 888
+  },
+  {
+   "month": "2025-11",
+   "already_present": 93,
+   "already_tankers": 88,
+   "tankers_total": 866
+  },
+  {
+   "month": "2025-12",
+   "already_present": 105,
+   "already_tankers": 103,
+   "tankers_total": 961
+  },
+  {
+   "month": "2026-01",
+   "already_present": 102,
+   "already_tankers": 100,
+   "tankers_total": 892
+  },
+  {
+   "month": "2026-02",
+   "already_present": 98,
+   "already_tankers": 95,
+   "tankers_total": 835
+  },
+  {
+   "month": "2026-03",
+   "already_present": 125,
+   "already_tankers": 124,
+   "tankers_total": 979
+  }
+ ],
+ "rq3": {
+  "positives": 34,
+  "positives_present": 27,
+  "caught_top30": 24,
+  "lead_median": 81.0,
+  "lead_ge30": 15,
+  "lead_ge90": 11,
+  "table": [
+   {
+    "vessel_id": "IMO9297541",
+    "name": "DOVE",
+    "listed": "2026-04-24",
+    "present_days": 16,
+    "first_top30": "2025-10-24",
+    "lead_days": 182.0,
+    "best_rank": 1.0
+   },
+   {
+    "vessel_id": "IMO9413004",
+    "name": "HORAE",
+    "listed": "2026-04-24",
+    "present_days": 14,
+    "first_top30": "2025-10-24",
+    "lead_days": 182.0,
+    "best_rank": 1.0
+   },
+   {
+    "vessel_id": "IMO9314179",
+    "name": "FLINT WIND",
+    "listed": "2026-07-24",
+    "present_days": 3,
+    "first_top30": "2026-01-25",
+    "lead_days": 180.0,
+    "best_rank": 6.0
+   },
+   {
+    "vessel_id": "IMO9417464",
+    "name": "ANIKA",
+    "listed": "2026-04-24",
+    "present_days": 14,
+    "first_top30": "2025-11-11",
+    "lead_days": 164.0,
+    "best_rank": 1.0
+   },
+   {
+    "vessel_id": "IMO9274082",
+    "name": "TM HAI HA 568",
+    "listed": "2026-04-24",
+    "present_days": 17,
+    "first_top30": "2025-11-25",
+    "lead_days": 150.0,
+    "best_rank": 2.0
+   },
+   {
+    "vessel_id": "IMO9296597",
+    "name": "PROMETEI",
+    "listed": "2026-02-24",
+    "present_days": 9,
+    "first_top30": "2025-10-02",
+    "lead_days": 145.0,
+    "best_rank": 13.0
+   },
+   {
+    "vessel_id": "IMO9291262",
+    "name": "SILVAR",
+    "listed": "2026-04-24",
+    "present_days": 27,
+    "first_top30": "2025-12-08",
+    "lead_days": 137.0,
+    "best_rank": 27.0
+   },
+   {
+    "vessel_id": "IMO9290397",
+    "name": "STORMBRINGER",
+    "listed": "2026-04-24",
+    "present_days": 9,
+    "first_top30": "2025-12-15",
+    "lead_days": 130.0,
+    "best_rank": 10.0
+   },
+   {
+    "vessel_id": "IMO9296377",
+    "name": "MARJORIE",
+    "listed": "2026-04-24",
+    "present_days": 19,
+    "first_top30": "2025-12-18",
+    "lead_days": 127.0,
+    "best_rank": 1.0
+   },
+   {
+    "vessel_id": "IMO9390587",
+    "name": "ONEIROI",
+    "listed": "2026-04-24",
+    "present_days": 6,
+    "first_top30": "2026-01-17",
+    "lead_days": 97.0,
+    "best_rank": 3.0
+   },
+   {
+    "vessel_id": "IMO9328170",
+    "name": "AETHER",
+    "listed": "2026-04-24",
+    "present_days": 8,
+    "first_top30": "2026-01-23",
+    "lead_days": 91.0,
+    "best_rank": 11.0
+   },
+   {
+    "vessel_id": "IMO9249128",
+    "name": "SAKHALIN",
+    "listed": "2026-04-24",
+    "present_days": 7,
+    "first_top30": "2026-01-31",
+    "lead_days": 83.0,
+    "best_rank": 2.0
+   },
+   {
+    "vessel_id": "IMO9305556",
+    "name": "MARVEN",
+    "listed": "2026-04-24",
+    "present_days": 24,
+    "first_top30": "2026-02-04",
+    "lead_days": 79.0,
+    "best_rank": 5.0
+   },
+   {
+    "vessel_id": "IMO9247194",
+    "name": "KUNPENG",
+    "listed": "2026-02-24",
+    "present_days": 6,
+    "first_top30": "2025-12-14",
+    "lead_days": 72.0,
+    "best_rank": 5.0
+   },
+   {
+    "vessel_id": "IMO9308077",
+    "name": "TYCHE 1",
+    "listed": "2025-12-19",
+    "present_days": 10,
+    "first_top30": "2025-10-15",
+    "lead_days": 65.0,
+    "best_rank": 1.0
+   }
+  ]
+ },
+ "rq2_pct_when_present": {
+  "pos": 0.955,
+  "neg": 0.5
+ },
+ "rq4_top10_eventually_listed": {
+  "vessels": 351,
+  "share": 0.0798
+ },
+ "rq4_top30_eventually_listed": {
+  "vessels": 806,
+  "share": 0.0409
+ },
+ "rq4_base_eventually_listed": 0.0198,
+ "rq4_candidates": [
+  {
+   "vessel_id": "IMO9471032",
+   "name": "ARRHENIUS",
+   "days_in_top10": 28
+  },
+  {
+   "vessel_id": "IMO9290361",
+   "name": "KAI 1",
+   "days_in_top10": 23
+  },
+  {
+   "vessel_id": "IMO9489285",
+   "name": "KNOSSOS",
+   "days_in_top10": 22
+  },
+  {
+   "vessel_id": "IMO9423736",
+   "name": "FIDAN",
+   "days_in_top10": 21
+  },
+  {
+   "vessel_id": "IMO1095337",
+   "name": "TAVIAN",
+   "days_in_top10": 21
+  },
+  {
+   "vessel_id": "IMO9254240",
+   "name": "DUKE II",
+   "days_in_top10": 21
+  },
+  {
+   "vessel_id": "IMO9293129",
+   "name": "WARRIOR SPIRIT",
+   "days_in_top10": 20
+  },
+  {
+   "vessel_id": "IMO9439400",
+   "name": "ORSA",
+   "days_in_top10": 19
+  },
+  {
+   "vessel_id": "IMO9290438",
+   "name": "MIDEA",
+   "days_in_top10": 19
+  },
+  {
+   "vessel_id": "IMO9388807",
+   "name": "GATTACA",
+   "days_in_top10": 19
+  },
+  {
+   "vessel_id": "IMO9240445",
+   "name": "NORAH",
+   "days_in_top10": 18
+  },
+  {
+   "vessel_id": "IMO9369760",
+   "name": "GAS RIVER",
+   "days_in_top10": 17
+  },
+  {
+   "vessel_id": "IMO9252371",
+   "name": "MT KIROHO",
+   "days_in_top10": 16
+  },
+  {
+   "vessel_id": "IMO9296195",
+   "name": "PAROS",
+   "days_in_top10": 16
+  },
+  {
+   "vessel_id": "IMO9773923",
+   "name": "PALLADIUM",
+   "days_in_top10": 16
+  }
+ ],
+ "rq4_flagged_listed_after_6m": [
+  {
+   "name": "SOLVANTE",
+   "listed": "2026-08-06"
+  },
+  {
+   "name": "ONEIROI",
+   "listed": "2026-04-24"
+  },
+  {
+   "name": "DOVE",
+   "listed": "2026-04-24"
+  },
+  {
+   "name": "TALUREX",
+   "listed": "2026-08-06"
+  },
+  {
+   "name": "BELLARIS",
+   "listed": "2026-07-24"
+  },
+  {
+   "name": "SOLSTRAUM",
+   "listed": "2026-07-24"
+  },
+  {
+   "name": "KORD ARCTIC",
+   "listed": "2026-07-24"
+  },
+  {
+   "name": "ANAYA",
+   "listed": "2026-07-24"
+  },
+  {
+   "name": "DAPHNE V",
+   "listed": "2026-07-24"
+  }
+ ]
+}

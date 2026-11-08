@@ -1,0 +1,14 @@
+# Phiên bản đã kiểm thử (Python 3.12). Java 17+ phải có sẵn (Spark 3.5).
+pandas==3.1.1
+numpy==2.5.4
+pyarrow==26.0.1
+pyspark==3.5.1
+xgboost==3.4.1
+requests==2.34.2
+setuptools<81          # PySpark 3.5 cần distutils, Python 3.12 đã bỏ
+# giao diện
+streamlit==1.67.0
+pydeck==0.9.3
+plotly==7.1.0
+networkx==3.4.2
+scikit-learn==1.9.1    # ROC-AUC trên trang đánh giá
